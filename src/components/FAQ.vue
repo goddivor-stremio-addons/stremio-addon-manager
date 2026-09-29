@@ -28,16 +28,17 @@
         </details>
         <details>
             <summary>
-                What is the developer console and how do I open it?
+                What are the (Web) Developer Tools and how do I open them?
             </summary>
             <p>
-                The browser developer console is a tool which logs the information associated with a web application, such
-                as network requests and errors. It also allows you to interact with the loaded web page using JavaScript.
-                Most modern browsers have a developer console built in.
+                The browser's (Web) Developer Tools are a set of tools which log the information associated with a web
+                application, such as network requests and errors. They also let you interact with the loaded web page using
+                JavaScript via the Console tab. Most modern browsers have them built in.
             </p>
             <p>
-                Use <a href="https://balsamiq.com/support/faqs/browserconsole/" target="_blank">this guide</a> to open your
-                browsers developer console, ensuring have the Stremio web app open.
+                In most browsers you can open them with <kbd>F12</kbd> (or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>,
+                <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd> on macOS), then switch to the <strong>Console</strong> tab,
+                ensuring you have the Stremio web app open.
             </p>
         </details>
         <details>

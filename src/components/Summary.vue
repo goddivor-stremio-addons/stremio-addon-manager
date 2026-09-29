@@ -30,9 +30,9 @@
             using your Stremio credentials in your browser.
           </li>
           <li>
-            Open the developer console <a href="#faq">(?)</a> and paste the
-            follow code snippet:
-            <code>JSON.parse(localStorage.getItem("profile")).auth.key</code>
+            Open the (Web) Developer Tools <a href="#faq">(?)</a> and paste the
+            following code snippet:
+            <code>JSON.parse(localStorage.getItem("profile"))?.auth?.key</code>
           </li>
           <li>Take the output value and paste it into the form below.</li>
         </ul>
