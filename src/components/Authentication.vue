@@ -16,7 +16,7 @@ const emits = defineEmits(['auth-key'])
 
 async function loginUserPassword() {
     try {
-        fetch(`${props.stremioAPIBase}login`, {
+        const resp = await fetch(`${props.stremioAPIBase}login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,14 +26,19 @@ async function loginUserPassword() {
                 email: email.value,
                 password: password.value,
             })
-        }).then((resp) => {
-            resp.json().then((data) => {
-                console.log("Auth data:" + data)
-                authKey.value = data.result.authKey
-                loginButtonText.value = 'Logged in'
-                emitAuthKey()
-            })
         })
+        const data = await resp.json()
+        if (!data || !data.result || !data.result.authKey) {
+            const message = data && data.error && data.error.message
+                ? data.error.message
+                : 'invalid response from Stremio (check your e-mail and password)'
+            console.error('Login failed:', data)
+            alert('Login failed: ' + message)
+            return
+        }
+        authKey.value = data.result.authKey
+        loginButtonText.value = 'Logged in'
+        emitAuthKey()
     } catch (err) {
         console.error(err);
         alert('Login failed: ' + err.message);
