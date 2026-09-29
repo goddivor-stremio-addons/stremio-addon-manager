@@ -8,6 +8,7 @@ const stremioAPIBase = "https://api.strem.io/api/"
 const dragging = false
 let stremioAuthKey = ref('');
 let addons = ref([])
+let addonsLoaded = ref(false)
 let loadAddonsButtonText = ref('Load Addons')
 
 function loadUserAddons() {
@@ -36,7 +37,8 @@ function loadUserAddons() {
                 alert('Failed to fetch user addons - are you sure you pasted the correct Stremio AuthKey?')
                 return
             }
-            addons.value = data.result.addons
+            addons.value = Array.isArray(data.result.addons) ? data.result.addons : []
+            addonsLoaded.value = true
         })
     }).catch((error) => {
         console.error('Error fetching user addons', error)
@@ -51,6 +53,13 @@ function syncUserAddons() {
         console.error('No auth key provided')
         return
     }
+    if (!addonsLoaded.value) {
+        // The addon list starts out empty, so syncing before "Load Addons" would
+        // overwrite the Stremio account's addons with an empty collection.
+        alert('Please click "Load Addons" first - syncing now would overwrite your Stremio addons with an empty list.')
+        return
+    }
+
     console.log('Syncing addons...')
 
     const url = `${stremioAPIBase}addonCollectionSet`
@@ -94,6 +103,9 @@ function getNestedObjectProperty(obj, path, defaultValue = null) {
 
 function setAuthKey(authKey) {
     stremioAuthKey.value = authKey
+    // A new auth key means a different account/session: require a fresh load before syncing
+    addons.value = []
+    addonsLoaded.value = false
     console.log('AuthKey set to: ', stremioAuthKey.value)
 }
 
@@ -128,9 +140,10 @@ function setAuthKey(authKey) {
             </fieldset>
             <fieldset id="form_step3">
                 <legend>Step 3: Sync Addons</legend>
-                <button type="button" class="button primary icon" @click="syncUserAddons">Sync to Stremio
+                <button type="button" class="button primary icon" :disabled="!addonsLoaded" @click="syncUserAddons">Sync to Stremio
                     <img src="https://icongr.am/feather/loader.svg?size=16&amp;color=ffffff" alt="icon">
                 </button>
+                <p v-if="!addonsLoaded">Load your addons in step 1 before syncing.</p>
             </fieldset>
         </form>
 
